@@ -17,6 +17,10 @@ When investigating Windows issues in this repository, **always use the WindowsIn
 | `Get-Printer`, `Get-WmiObject Win32_Printer` | `ListPrinters`, `GetPrinter` |
 | `Get-PrintJob` | `GetPrintJobs`, `GetAllPrintJobs` |
 | `Get-Content`, `Select-String` on log files | `DiscoverLogs`, `ReadLog` |
+| `Get-ItemProperty` (Registry) | `GetRegistryKey`, `GetRegistryValue` |
+| `Get-ChildItem` (Registry) | `SearchRegistryKeys`, `SearchRegistryValues` |
+| `Get-Process` | `ListProcesses`, `GetProcess`, `SearchProcesses` |
+| `ps`, `tasklist` | `GetProcessSummary` |
 
 ### Available MCP Tools
 
@@ -75,6 +79,35 @@ When investigating Windows issues in this repository, **always use the WindowsIn
       - `tailLines` (optional): Number of lines to read from end of file
       - `searchPattern` (optional): Regex pattern to filter lines
       - `maxLines` (optional): Maximum number of lines to return (default: 500)
+
+#### Registry Tools
+16. **GetRegistryKey** - Gets information about a registry key including subkeys and values
+    - Parameters:
+      - `path` (required): Registry path (e.g., HKLM\SOFTWARE\Microsoft)
+17. **GetRegistryValue** - Gets a specific value from a registry key
+    - Parameters:
+      - `path` (required): Registry path
+      - `valueName` (required): Name of the value (empty string for default)
+18. **SearchRegistryKeys** - Searches for registry keys matching a pattern
+    - Parameters:
+      - `basePath` (required): Base registry path to search from
+      - `pattern` (required): Regex pattern to match key names
+      - `maxResults` (optional): Maximum number of results (default: 100)
+19. **SearchRegistryValues** - Searches for registry values matching a pattern
+    - Parameters:
+      - `basePath` (required): Base registry path to search from
+      - `pattern` (required): Regex pattern to match value names or data
+      - `maxResults` (optional): Maximum number of results (default: 100)
+
+#### Process Tools
+20. **ListProcesses** - Lists all running processes on the system
+21. **GetProcess** - Gets information about a specific process by ID
+    - Parameters:
+      - `processId` (required): The process ID
+22. **SearchProcesses** - Searches for processes matching a pattern
+    - Parameters:
+      - `pattern` (required): Regex pattern to match process name or command line
+23. **GetProcessSummary** - Gets a summary of system resource usage including top CPU and memory consumers
 
 ### Why Use MCP Tools?
 
