@@ -83,7 +83,7 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 ### Phase 3: Extended Capabilities
 - [x] Registry exploration tools
 - [x] Service status tools (ListServices, GetService, SearchServices)
-- [ ] Process inspection tools
+- [x] Process inspection tools
 - [x] Network diagnostics tools (TestConnection, ResolveDns, GetNetworkAdapters)
 - [x] Print diagnostics tools (ListPrinters, GetPrinter, GetPrintJobs, GetAllPrintJobs)
 
