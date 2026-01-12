@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IServiceInfoService, WindowsServiceInfoService>();
 builder.Services.AddSingleton<INetworkService, WindowsNetworkService>();
 builder.Services.AddSingleton<IPrintService, WindowsPrintService>();
 builder.Services.AddSingleton<IFileLogService, WindowsFileLogService>();
+builder.Services.AddSingleton<IRegistryService, WindowsRegistryService>();
 
 builder.Services
     .AddMcpServer()
@@ -38,7 +39,8 @@ builder.Services
     .WithTools<ServiceTools>()
     .WithTools<NetworkTools>()
     .WithTools<PrintTools>()
-    .WithTools<FileLogTools>();
+    .WithTools<FileLogTools>()
+    .WithTools<RegistryTools>();
 
 var app = builder.Build();
 await app.RunAsync();

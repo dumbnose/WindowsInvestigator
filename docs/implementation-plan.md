@@ -81,7 +81,7 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 - [x] Error handling and logging
 
 ### Phase 3: Extended Capabilities
-- [ ] Registry exploration tools
+- [x] Registry exploration tools
 - [x] Service status tools (ListServices, GetService, SearchServices)
 - [ ] Process inspection tools
 - [x] Network diagnostics tools (TestConnection, ResolveDns, GetNetworkAdapters)
