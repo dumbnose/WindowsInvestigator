@@ -67,6 +67,36 @@ When investigating Windows issues in this repository, **always use the WindowsIn
 3. **Consistency** - Demonstrates the intended usage patterns
 4. **Feature Discovery** - Helps identify gaps in functionality that need to be added
 
+## Code Quality Requirements
+
+### Test Coverage
+
+**All code must have full test coverage before being checked in.** This includes:
+
+1. **Unit Tests** (in `tests/WindowsInvestigator.McpServer.Tests/`)
+   - Test each MCP tool class with mocked dependencies
+   - Verify correct parameter passing to services
+   - Test edge cases (null, empty, invalid inputs)
+   - Use NSubstitute for mocking interfaces
+
+2. **Integration Tests** (in `tests/WindowsInvestigator.McpServer.IntegrationTests/`)
+   - Test service implementations against real Windows APIs
+   - Verify actual Windows data is returned correctly
+   - Test error handling with invalid inputs
+
+### Test Patterns
+
+- Use FluentAssertions for readable assertions
+- Use NSubstitute for mocking
+- Follow Arrange-Act-Assert pattern
+- Name tests descriptively: `MethodName_Scenario_ExpectedBehavior`
+
+### Before Committing
+
+1. Ensure all new code has corresponding tests
+2. Run `dotnet test` and verify all tests pass
+3. Verify build succeeds with `dotnet build`
+
 ### Adding New Features
 
 If you encounter a scenario where the MCP server doesn't have the needed functionality:
