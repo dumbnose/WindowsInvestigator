@@ -76,7 +76,7 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 ### Phase 2: Core Functionality
 - [x] Event Log tools (query, filter by level/source, reverse chronological)
 - [x] Event Log time range filtering
-- [ ] File log discovery and reading
+- [x] File log discovery and reading
 - [x] System information resource
 - [ ] Error handling and logging
 

@@ -16,6 +16,7 @@ When investigating Windows issues in this repository, **always use the WindowsIn
 | `Get-NetAdapter` | `GetNetworkAdapters` |
 | `Get-Printer`, `Get-WmiObject Win32_Printer` | `ListPrinters`, `GetPrinter` |
 | `Get-PrintJob` | `GetPrintJobs`, `GetAllPrintJobs` |
+| `Get-Content`, `Select-String` on log files | `DiscoverLogs`, `ReadLog` |
 
 ### Available MCP Tools
 
@@ -27,6 +28,9 @@ When investigating Windows issues in this repository, **always use the WindowsIn
      - `level` (optional): Filter by level (Critical, Error, Warning, Information, Verbose)
      - `source` (optional): Filter by event source
      - `maxResults` (optional): Maximum number of events to return (default: 50)
+     - `reverseChronological` (optional): Return most recent events first (default: true)
+     - `startTime` (optional): Filter events after this time (ISO 8601 format)
+     - `endTime` (optional): Filter events before this time (ISO 8601 format)
 
 #### System Info Tools
 3. **GetSystemInfo** - Gets comprehensive system information including OS, hardware, memory, disk, and network details
@@ -59,6 +63,18 @@ When investigating Windows issues in this repository, **always use the WindowsIn
     - Parameters:
       - `printerName` (required): Name of the printer
 13. **GetAllPrintJobs** - Gets print jobs from all printers
+
+#### File Log Tools
+14. **DiscoverLogs** - Discovers log files in common Windows locations
+    - Parameters:
+      - `includeSystemLogs` (optional): Include system log locations (default: true)
+      - `maxFiles` (optional): Maximum number of files to return (default: 100)
+15. **ReadLog** - Reads content from a log file
+    - Parameters:
+      - `path` (required): Full path to the log file
+      - `tailLines` (optional): Number of lines to read from end of file
+      - `searchPattern` (optional): Regex pattern to filter lines
+      - `maxLines` (optional): Maximum number of lines to return (default: 500)
 
 ### Why Use MCP Tools?
 
