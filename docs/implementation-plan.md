@@ -65,9 +65,9 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 ### Phase 1: Foundation (Current)
 - [x] Repository setup
 - [x] Documentation structure
-- [ ] Project scaffolding (.NET solution)
-- [ ] Basic MCP server setup
-- [ ] First tool: Event Log query
+- [x] Project scaffolding (.NET solution)
+- [x] Basic MCP server setup
+- [x] First tool: Event Log query
 
 ### Phase 2: Core Functionality
 - [ ] Event Log tools (query, filter, search by time range)
