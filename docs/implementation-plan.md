@@ -78,7 +78,7 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 - [x] Event Log time range filtering
 - [x] File log discovery and reading
 - [x] System information resource
-- [ ] Error handling and logging
+- [x] Error handling and logging
 
 ### Phase 3: Extended Capabilities
 - [ ] Registry exploration tools

@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class SystemInfoToolsTests
     public SystemInfoToolsTests()
     {
         _systemInfoService = Substitute.For<ISystemInfoService>();
-        _sut = new SystemInfoTools(_systemInfoService);
+        _sut = new SystemInfoTools(_systemInfoService, NullLogger<SystemInfoTools>.Instance);
     }
 
     [Fact]
@@ -95,5 +97,18 @@ public class SystemInfoToolsTests
 
         // Assert
         _systemInfoService.Received(1).GetSystemInfo();
+    }
+
+    [Fact]
+    public void GetSystemInfo_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _systemInfoService.GetSystemInfo().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.GetSystemInfo();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }

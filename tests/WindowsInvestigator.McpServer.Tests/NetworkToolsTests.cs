@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class NetworkToolsTests
     public NetworkToolsTests()
     {
         _networkService = Substitute.For<INetworkService>();
-        _sut = new NetworkTools(_networkService);
+        _sut = new NetworkTools(_networkService, NullLogger<NetworkTools>.Instance);
     }
 
     [Fact]
@@ -202,5 +204,62 @@ public class NetworkToolsTests
         // Assert
         result.Host.Should().Be(host);
         result.Port.Should().Be(port);
+    }
+
+    [Fact]
+    public void TestConnection_WithEmptyHost_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.TestConnection("", 80);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*host*");
+    }
+
+    [Fact]
+    public void TestConnection_WithInvalidPort_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.TestConnection("localhost", 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*port*");
+    }
+
+    [Fact]
+    public void TestConnection_WithInvalidTimeout_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.TestConnection("localhost", 80, 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*timeoutMs*");
+    }
+
+    [Fact]
+    public void ResolveDns_WithEmptyHostname_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.ResolveDns("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*hostName*");
+    }
+
+    [Fact]
+    public void GetNetworkAdapters_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _networkService.GetNetworkAdapters().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.GetNetworkAdapters();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }

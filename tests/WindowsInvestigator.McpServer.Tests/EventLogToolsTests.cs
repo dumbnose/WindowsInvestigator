@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class EventLogToolsTests
     public EventLogToolsTests()
     {
         _eventLogService = Substitute.For<IEventLogService>();
-        _sut = new EventLogTools(_eventLogService);
+        _sut = new EventLogTools(_eventLogService, NullLogger<EventLogTools>.Instance);
     }
 
     [Fact]
@@ -179,5 +181,55 @@ public class EventLogToolsTests
 
         // Assert
         _eventLogService.Received(1).QueryEvents(logName, null, null, 50, true, startTime, endTime);
+    }
+
+    [Fact]
+    public void QueryEventLog_WithEmptyLogName_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.QueryEventLog("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*logName*");
+    }
+
+    [Fact]
+    public void QueryEventLog_WithInvalidMaxResults_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.QueryEventLog("Application", maxResults: 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*maxResults*");
+    }
+
+    [Fact]
+    public void QueryEventLog_WithStartTimeAfterEndTime_ThrowsInvalidParameterException()
+    {
+        // Arrange
+        var startTime = new DateTime(2026, 1, 12, 17, 0, 0);
+        var endTime = new DateTime(2026, 1, 12, 9, 0, 0);
+
+        // Act
+        Action act = () => _sut.QueryEventLog("Application", startTime: startTime, endTime: endTime);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*startTime*endTime*");
+    }
+
+    [Fact]
+    public void ListEventLogs_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _eventLogService.GetLogNames().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.ListEventLogs();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }

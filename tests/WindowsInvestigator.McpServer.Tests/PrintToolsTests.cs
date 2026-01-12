@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class PrintToolsTests
     public PrintToolsTests()
     {
         _printService = Substitute.For<IPrintService>();
-        _sut = new PrintTools(_printService);
+        _sut = new PrintTools(_printService, NullLogger<PrintTools>.Instance);
     }
 
     [Fact]
@@ -227,5 +229,53 @@ public class PrintToolsTests
 
         // Assert
         result!.Name.Should().Be(printerName);
+    }
+
+    [Fact]
+    public void GetPrinter_WithEmptyName_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.GetPrinter("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*printerName*");
+    }
+
+    [Fact]
+    public void GetPrintJobs_WithEmptyPrinterName_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.GetPrintJobs("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*printerName*");
+    }
+
+    [Fact]
+    public void ListPrinters_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _printService.GetPrinters().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.ListPrinters();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
+    }
+
+    [Fact]
+    public void GetAllPrintJobs_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _printService.GetAllPrintJobs().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.GetAllPrintJobs();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }

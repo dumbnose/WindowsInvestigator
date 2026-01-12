@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class ServiceToolsTests
     public ServiceToolsTests()
     {
         _serviceInfoService = Substitute.For<IServiceInfoService>();
-        _sut = new ServiceTools(_serviceInfoService);
+        _sut = new ServiceTools(_serviceInfoService, NullLogger<ServiceTools>.Instance);
     }
 
     [Fact]
@@ -160,5 +162,51 @@ public class ServiceToolsTests
 
         // Assert
         result!.Name.Should().Be(serviceName);
+    }
+
+    [Fact]
+    public void GetService_WithEmptyName_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.GetService("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*serviceName*");
+    }
+
+    [Fact]
+    public void SearchServices_WithEmptyPattern_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.SearchServices("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*pattern*");
+    }
+
+    [Fact]
+    public void SearchServices_WithInvalidRegex_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.SearchServices("[invalid");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*pattern*Invalid regex*");
+    }
+
+    [Fact]
+    public void ListServices_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _serviceInfoService.GetAllServices().Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.ListServices();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }

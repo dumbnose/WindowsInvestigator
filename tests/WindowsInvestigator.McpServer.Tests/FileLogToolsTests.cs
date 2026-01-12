@@ -1,5 +1,7 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using WindowsInvestigator.McpServer.Exceptions;
 using WindowsInvestigator.McpServer.Services;
 using WindowsInvestigator.McpServer.Tools;
 
@@ -13,7 +15,7 @@ public class FileLogToolsTests
     public FileLogToolsTests()
     {
         _fileLogService = Substitute.For<IFileLogService>();
-        _sut = new FileLogTools(_fileLogService);
+        _sut = new FileLogTools(_fileLogService, NullLogger<FileLogTools>.Instance);
     }
 
     [Fact]
@@ -160,5 +162,73 @@ public class FileLogToolsTests
 
         // Assert
         result.Error.Should().Be("File not found");
+    }
+
+    [Fact]
+    public void DiscoverLogs_WithInvalidMaxFiles_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.DiscoverLogs(maxFiles: 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*maxFiles*");
+    }
+
+    [Fact]
+    public void ReadLog_WithEmptyPath_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.ReadLog("");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*path*");
+    }
+
+    [Fact]
+    public void ReadLog_WithInvalidMaxLines_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.ReadLog(@"C:\test.log", maxLines: 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*maxLines*");
+    }
+
+    [Fact]
+    public void ReadLog_WithInvalidTailLines_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.ReadLog(@"C:\test.log", tailLines: 0);
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*tailLines*");
+    }
+
+    [Fact]
+    public void ReadLog_WithInvalidRegex_ThrowsInvalidParameterException()
+    {
+        // Act
+        Action act = () => _sut.ReadLog(@"C:\test.log", searchPattern: "[invalid");
+
+        // Assert
+        act.Should().Throw<InvalidParameterException>()
+            .WithMessage("*searchPattern*Invalid regex*");
+    }
+
+    [Fact]
+    public void DiscoverLogs_WhenServiceThrows_ThrowsWindowsApiException()
+    {
+        // Arrange
+        _fileLogService.DiscoverLogs(true, 100).Returns(_ => throw new InvalidOperationException("Test error"));
+
+        // Act
+        Action act = () => _sut.DiscoverLogs();
+
+        // Assert
+        act.Should().Throw<WindowsApiException>();
     }
 }
