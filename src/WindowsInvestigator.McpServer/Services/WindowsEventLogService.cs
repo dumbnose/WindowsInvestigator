@@ -13,9 +13,16 @@ public class WindowsEventLogService : IEventLogService
         return session.GetLogNames().OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
-    public IEnumerable<EventLogEntry> QueryEvents(string logName, string? level = null, string? source = null, int maxResults = 50, bool reverseChronological = true)
+    public IEnumerable<EventLogEntry> QueryEvents(
+        string logName, 
+        string? level = null, 
+        string? source = null, 
+        int maxResults = 50, 
+        bool reverseChronological = true,
+        DateTime? startTime = null,
+        DateTime? endTime = null)
     {
-        var query = BuildQuery(level, source);
+        var query = BuildQuery(level, source, startTime, endTime);
         
         var eventQuery = new EventLogQuery(logName, PathType.LogName, query)
         {
@@ -43,7 +50,7 @@ public class WindowsEventLogService : IEventLogService
         return events;
     }
 
-    private static string BuildQuery(string? level, string? source)
+    private static string BuildQuery(string? level, string? source, DateTime? startTime, DateTime? endTime)
     {
         var conditions = new List<string>();
         
@@ -68,6 +75,22 @@ public class WindowsEventLogService : IEventLogService
         if (!string.IsNullOrEmpty(source))
         {
             conditions.Add($"Provider[@Name='{source}']");
+        }
+
+        // Time range filtering uses XPath timediff function
+        // timediff(@SystemTime) returns milliseconds since the event
+        if (startTime.HasValue)
+        {
+            // Events created after startTime
+            var startTimeUtc = startTime.Value.ToUniversalTime();
+            conditions.Add($"TimeCreated[@SystemTime>='{startTimeUtc:O}']");
+        }
+
+        if (endTime.HasValue)
+        {
+            // Events created before endTime
+            var endTimeUtc = endTime.Value.ToUniversalTime();
+            conditions.Add($"TimeCreated[@SystemTime<='{endTimeUtc:O}']");
         }
         
         if (conditions.Count == 0)

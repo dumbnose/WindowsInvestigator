@@ -180,4 +180,74 @@ public class WindowsEventLogServiceTests
             }
         }
     }
+
+    [Fact]
+    public void QueryEvents_WithStartTime_ReturnsEventsAfterStartTime()
+    {
+        // Arrange - use a time from 1 hour ago
+        var startTime = DateTime.Now.AddHours(-1);
+
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 20, startTime: startTime).ToList();
+
+        // Assert
+        events.Should().AllSatisfy(e => e.TimeCreated.Should().BeOnOrAfter(startTime));
+    }
+
+    [Fact]
+    public void QueryEvents_WithEndTime_ReturnsEventsBeforeEndTime()
+    {
+        // Arrange - use a time from 1 hour ago as end time
+        var endTime = DateTime.Now.AddHours(-1);
+
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 20, endTime: endTime).ToList();
+
+        // Assert
+        events.Should().AllSatisfy(e => e.TimeCreated.Should().BeOnOrBefore(endTime));
+    }
+
+    [Fact]
+    public void QueryEvents_WithTimeRange_ReturnsEventsWithinRange()
+    {
+        // Arrange - use a 2-hour window from 3 hours ago to 1 hour ago
+        var startTime = DateTime.Now.AddHours(-3);
+        var endTime = DateTime.Now.AddHours(-1);
+
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 20, startTime: startTime, endTime: endTime).ToList();
+
+        // Assert
+        events.Should().AllSatisfy(e =>
+        {
+            e.TimeCreated.Should().BeOnOrAfter(startTime);
+            e.TimeCreated.Should().BeOnOrBefore(endTime);
+        });
+    }
+
+    [Fact]
+    public void QueryEvents_WithFutureStartTime_ReturnsEmpty()
+    {
+        // Arrange - use a time in the future
+        var startTime = DateTime.Now.AddHours(1);
+
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 20, startTime: startTime).ToList();
+
+        // Assert
+        events.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void QueryEvents_WithVeryOldEndTime_ReturnsEmpty()
+    {
+        // Arrange - use a very old end time (before any events would exist)
+        var endTime = new DateTime(1990, 1, 1);
+
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 20, endTime: endTime).ToList();
+
+        // Assert
+        events.Should().BeEmpty();
+    }
 }
