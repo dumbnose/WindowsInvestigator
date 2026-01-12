@@ -13,11 +13,16 @@ public class WindowsEventLogService : IEventLogService
         return session.GetLogNames().OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
-    public IEnumerable<EventLogEntry> QueryEvents(string logName, string? level = null, string? source = null, int maxResults = 50)
+    public IEnumerable<EventLogEntry> QueryEvents(string logName, string? level = null, string? source = null, int maxResults = 50, bool reverseChronological = true)
     {
         var query = BuildQuery(level, source);
         
-        using var reader = new EventLogReader(new EventLogQuery(logName, PathType.LogName, query));
+        var eventQuery = new EventLogQuery(logName, PathType.LogName, query)
+        {
+            ReverseDirection = reverseChronological
+        };
+        
+        using var reader = new EventLogReader(eventQuery);
         
         var events = new List<EventLogEntry>();
         EventRecord? record;

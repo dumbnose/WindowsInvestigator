@@ -129,4 +129,55 @@ public class WindowsEventLogServiceTests
         // Assert
         act.Should().NotThrow();
     }
+
+    [Fact]
+    public void QueryEvents_WithReverseChronologicalTrue_ReturnsMostRecentFirst()
+    {
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 10, reverseChronological: true).ToList();
+
+        // Assert
+        if (events.Count > 1)
+        {
+            // Events should be in descending order by time
+            for (int i = 0; i < events.Count - 1; i++)
+            {
+                events[i].TimeCreated.Should().BeOnOrAfter(events[i + 1].TimeCreated!.Value);
+            }
+        }
+    }
+
+    [Fact]
+    public void QueryEvents_WithReverseChronologicalFalse_ReturnsOldestFirst()
+    {
+        // Act
+        var events = _sut.QueryEvents("System", maxResults: 10, reverseChronological: false).ToList();
+
+        // Assert
+        if (events.Count > 1)
+        {
+            // Events should be in ascending order by time
+            for (int i = 0; i < events.Count - 1; i++)
+            {
+                events[i].TimeCreated.Should().BeOnOrBefore(events[i + 1].TimeCreated!.Value);
+            }
+        }
+    }
+
+    [Fact]
+    public void QueryEvents_DefaultReverseChronological_ReturnsMostRecentFirst()
+    {
+        // Act - default should be reverseChronological: true
+        var events = _sut.QueryEvents("System", maxResults: 10).ToList();
+
+        // Assert
+        if (events.Count > 1)
+        {
+            // Events should be in descending order by time (most recent first)
+            for (int i = 0; i < events.Count - 1; i++)
+            {
+                events[i].TimeCreated.Should().BeOnOrAfter(events[i + 1].TimeCreated!.Value);
+            }
+        }
+    }
 }

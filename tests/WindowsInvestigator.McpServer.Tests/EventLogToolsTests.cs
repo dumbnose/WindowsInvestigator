@@ -65,14 +65,14 @@ public class EventLogToolsTests
             }
         };
         
-        _eventLogService.QueryEvents(logName, level, source, maxResults).Returns(expectedEvents);
+        _eventLogService.QueryEvents(logName, level, source, maxResults, true).Returns(expectedEvents);
 
         // Act
         var result = _sut.QueryEventLog(logName, level, source, maxResults);
 
         // Assert
         result.Should().BeEquivalentTo(expectedEvents);
-        _eventLogService.Received(1).QueryEvents(logName, level, source, maxResults);
+        _eventLogService.Received(1).QueryEvents(logName, level, source, maxResults, true);
     }
 
     [Fact]
@@ -82,14 +82,14 @@ public class EventLogToolsTests
         var logName = "System";
         var expectedEvents = Array.Empty<EventLogEntry>();
         
-        _eventLogService.QueryEvents(logName, null, null, 50).Returns(expectedEvents);
+        _eventLogService.QueryEvents(logName, null, null, 50, true).Returns(expectedEvents);
 
         // Act
         var result = _sut.QueryEventLog(logName);
 
         // Assert
         result.Should().BeEmpty();
-        _eventLogService.Received(1).QueryEvents(logName, null, null, 50);
+        _eventLogService.Received(1).QueryEvents(logName, null, null, 50, true);
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class EventLogToolsTests
             new EventLogEntry { EventId = 3, Level = "Information", Message = "Info 1" }
         };
         
-        _eventLogService.QueryEvents("Application", null, null, 50).Returns(events);
+        _eventLogService.QueryEvents("Application", null, null, 50, true).Returns(events);
 
         // Act
         var result = _sut.QueryEventLog("Application");
@@ -111,5 +111,21 @@ public class EventLogToolsTests
         // Assert
         result.Should().HaveCount(3);
         result.Select(e => e.EventId).Should().ContainInOrder(1, 2, 3);
+    }
+
+    [Fact]
+    public void QueryEventLog_WithReverseChronologicalFalse_PassesParameterToService()
+    {
+        // Arrange
+        var logName = "Application";
+        var expectedEvents = Array.Empty<EventLogEntry>();
+        
+        _eventLogService.QueryEvents(logName, null, null, 50, false).Returns(expectedEvents);
+
+        // Act
+        var result = _sut.QueryEventLog(logName, reverseChronological: false);
+
+        // Assert
+        _eventLogService.Received(1).QueryEvents(logName, null, null, 50, false);
     }
 }

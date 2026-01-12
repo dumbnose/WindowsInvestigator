@@ -24,9 +24,10 @@ public sealed class EventLogTools
     public IEnumerable<EventLogEntry> QueryEventLog(
         [Description("Name of the event log (e.g., System, Application, Security)")] string logName,
         [Description("Filter by level: Critical, Error, Warning, Information, Verbose")] string? level = null,
-        [Description("Filter by event source")] string? source = null,
-        [Description("Maximum number of events to return")] int maxResults = 50)
+        [Description("Filter by event source/provider name")] string? source = null,
+        [Description("Maximum number of events to return")] int maxResults = 50,
+        [Description("If true, returns most recent events first (default: true)")] bool reverseChronological = true)
     {
-        return _eventLogService.QueryEvents(logName, level, source, maxResults);
+        return _eventLogService.QueryEvents(logName, level, source, maxResults, reverseChronological);
     }
 }

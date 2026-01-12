@@ -29,5 +29,6 @@ public interface IEventLogService
     /// <param name="level">Optional filter by level (Critical, Error, Warning, Information, Verbose)</param>
     /// <param name="source">Optional filter by event source/provider</param>
     /// <param name="maxResults">Maximum number of results to return</param>
-    IEnumerable<EventLogEntry> QueryEvents(string logName, string? level = null, string? source = null, int maxResults = 50);
+    /// <param name="reverseChronological">If true, returns most recent events first (default: true)</param>
+    IEnumerable<EventLogEntry> QueryEvents(string logName, string? level = null, string? source = null, int maxResults = 50, bool reverseChronological = true);
 }
