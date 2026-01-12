@@ -29,15 +29,16 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 ## Data Sources to Expose
 
 ### Phase 1: Core Sources
-- [ ] **Windows Event Logs** - System, Application, Security, and custom logs
+- [x] **Windows Event Logs** - System, Application, Security, and custom logs
 - [ ] **File-based Logs** - Common log locations (e.g., `%TEMP%`, `%ProgramData%`, app-specific logs)
-- [ ] **System Information** - OS version, hardware, installed software
+- [x] **System Information** - OS version, hardware, installed software
 
 ### Phase 2: Extended Sources
 - [ ] **Registry** - Key configuration areas relevant to troubleshooting
-- [ ] **Services** - Status, startup type, dependencies
+- [x] **Services** - Status, startup type, dependencies
 - [ ] **Processes** - Running processes, resource usage, command lines
-- [ ] **Network** - Connections, firewall rules, DNS cache
+- [x] **Network** - Connections, firewall rules, DNS cache
+- [x] **Printing** - Printers, print jobs, status
 
 ### Phase 3: Advanced Sources
 - [ ] **Performance Counters** - CPU, memory, disk, network metrics
@@ -73,16 +74,18 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 - [x] Testable architecture (dependency injection)
 
 ### Phase 2: Core Functionality
-- [ ] Event Log tools (query, filter, search by time range)
+- [x] Event Log tools (query, filter by level/source)
+- [ ] Event Log time range filtering
 - [ ] File log discovery and reading
-- [ ] System information resource
+- [x] System information resource
 - [ ] Error handling and logging
 
 ### Phase 3: Extended Capabilities
 - [ ] Registry exploration tools
-- [ ] Service status tools
+- [x] Service status tools (ListServices, GetService, SearchServices)
 - [ ] Process inspection tools
-- [ ] Network diagnostics tools
+- [x] Network diagnostics tools (TestConnection, ResolveDns, GetNetworkAdapters)
+- [x] Print diagnostics tools (ListPrinters, GetPrinter, GetPrintJobs, GetAllPrintJobs)
 
 ### Phase 4: Polish & Distribution
 - [ ] Installation script / MSI
