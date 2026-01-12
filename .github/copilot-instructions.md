@@ -9,10 +9,17 @@ When investigating Windows issues in this repository, **always use the WindowsIn
 | Instead of... | Use MCP Tool |
 |---------------|--------------|
 | `Get-WinEvent` | `QueryEventLog` or `ListEventLogs` |
-| Direct Event Log API calls | `QueryEventLog` |
+| `Get-ComputerInfo`, `systeminfo` | `GetSystemInfo` |
+| `Get-Service` | `ListServices`, `GetService`, `SearchServices` |
+| `Test-NetConnection` | `TestConnection` |
+| `Resolve-DnsName` | `ResolveDns` |
+| `Get-NetAdapter` | `GetNetworkAdapters` |
+| `Get-Printer`, `Get-WmiObject Win32_Printer` | `ListPrinters`, `GetPrinter` |
+| `Get-PrintJob` | `GetPrintJobs`, `GetAllPrintJobs` |
 
 ### Available MCP Tools
 
+#### Event Log Tools
 1. **ListEventLogs** - Lists all available Windows Event Log names
 2. **QueryEventLog** - Queries events from a Windows Event Log
    - Parameters:
@@ -20,6 +27,38 @@ When investigating Windows issues in this repository, **always use the WindowsIn
      - `level` (optional): Filter by level (Critical, Error, Warning, Information, Verbose)
      - `source` (optional): Filter by event source
      - `maxResults` (optional): Maximum number of events to return (default: 50)
+
+#### System Info Tools
+3. **GetSystemInfo** - Gets comprehensive system information including OS, hardware, memory, disk, and network details
+
+#### Service Tools
+4. **ListServices** - Lists all Windows services with their status
+5. **GetService** - Gets detailed information about a specific Windows service
+   - Parameters:
+     - `serviceName` (required): The service name (e.g., "Spooler", "wuauserv")
+6. **SearchServices** - Searches for Windows services by name pattern
+   - Parameters:
+     - `searchPattern` (required): Pattern to search for in service names/display names
+
+#### Network Tools
+7. **TestConnection** - Tests network connectivity to a host (like ping/Test-NetConnection)
+   - Parameters:
+     - `host` (required): Hostname or IP address to test
+     - `port` (optional): TCP port to test (if provided, tests TCP connectivity)
+8. **ResolveDns** - Resolves a hostname to IP addresses
+   - Parameters:
+     - `hostname` (required): Hostname to resolve
+9. **GetNetworkAdapters** - Gets information about all network adapters
+
+#### Print Tools
+10. **ListPrinters** - Lists all installed printers with their status
+11. **GetPrinter** - Gets detailed information about a specific printer
+    - Parameters:
+      - `printerName` (required): Name of the printer
+12. **GetPrintJobs** - Gets print jobs for a specific printer
+    - Parameters:
+      - `printerName` (required): Name of the printer
+13. **GetAllPrintJobs** - Gets print jobs from all printers
 
 ### Why Use MCP Tools?
 
