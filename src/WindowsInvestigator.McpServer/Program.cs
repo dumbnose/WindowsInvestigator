@@ -31,6 +31,10 @@ builder.Services.AddSingleton<IPrintService, WindowsPrintService>();
 builder.Services.AddSingleton<IFileLogService, WindowsFileLogService>();
 builder.Services.AddSingleton<IRegistryService, WindowsRegistryService>();
 builder.Services.AddSingleton<IProcessService, WindowsProcessService>();
+builder.Services.AddSingleton<IPerformanceService, WindowsPerformanceService>();
+builder.Services.AddSingleton<IWindowsUpdateService, WindowsUpdateService>();
+builder.Services.AddSingleton<IReliabilityService, WindowsReliabilityService>();
+builder.Services.AddSingleton<IScheduledTaskService, WindowsScheduledTaskService>();
 
 builder.Services
     .AddMcpServer()
@@ -42,7 +46,11 @@ builder.Services
     .WithTools<PrintTools>()
     .WithTools<FileLogTools>()
     .WithTools<RegistryTools>()
-    .WithTools<ProcessTools>();
+    .WithTools<ProcessTools>()
+    .WithTools<PerformanceTools>()
+    .WithTools<WindowsUpdateTools>()
+    .WithTools<ReliabilityTools>()
+    .WithTools<ScheduledTaskTools>();
 
 var app = builder.Build();
 await app.RunAsync();

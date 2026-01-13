@@ -30,21 +30,21 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 
 ### Phase 1: Core Sources
 - [x] **Windows Event Logs** - System, Application, Security, and custom logs
-- [ ] **File-based Logs** - Common log locations (e.g., `%TEMP%`, `%ProgramData%`, app-specific logs)
+- [x] **File-based Logs** - Common log locations (e.g., `%TEMP%`, `%ProgramData%`, app-specific logs)
 - [x] **System Information** - OS version, hardware, installed software
 
 ### Phase 2: Extended Sources
-- [ ] **Registry** - Key configuration areas relevant to troubleshooting
+- [x] **Registry** - Key configuration areas relevant to troubleshooting
 - [x] **Services** - Status, startup type, dependencies
-- [ ] **Processes** - Running processes, resource usage, command lines
+- [x] **Processes** - Running processes, resource usage, command lines
 - [x] **Network** - Connections, firewall rules, DNS cache
 - [x] **Printing** - Printers, print jobs, status
 
-### Phase 3: Advanced Sources
-- [ ] **Performance Counters** - CPU, memory, disk, network metrics
-- [ ] **Windows Update** - Update history, pending updates, failures
-- [ ] **Reliability Monitor** - Application crashes, system failures
-- [ ] **Scheduled Tasks** - Task status, history, failures
+### Phase 3: Advanced Sources ✅
+- [x] **Performance Counters** - CPU, memory, disk, network metrics
+- [x] **Windows Update** - Update history, pending updates, failures
+- [x] **Reliability Monitor** - Application crashes, system failures
+- [x] **Scheduled Tasks** - Task status, history, failures
 
 ## Technology Decisions
 
@@ -63,7 +63,7 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 
 ## Implementation Phases
 
-### Phase 1: Foundation (Current)
+### Phase 1: Foundation ✅
 - [x] Repository setup
 - [x] Documentation structure
 - [x] Project scaffolding (.NET solution)
@@ -73,21 +73,21 @@ Create MCP (Model Context Protocol) servers that expose Windows diagnostic data 
 - [x] Integration testing framework
 - [x] Testable architecture (dependency injection)
 
-### Phase 2: Core Functionality
+### Phase 2: Core Functionality ✅
 - [x] Event Log tools (query, filter by level/source, reverse chronological)
 - [x] Event Log time range filtering
 - [x] File log discovery and reading
 - [x] System information resource
 - [x] Error handling and logging
 
-### Phase 3: Extended Capabilities
+### Phase 3: Extended Capabilities ✅
 - [x] Registry exploration tools
 - [x] Service status tools (ListServices, GetService, SearchServices)
 - [x] Process inspection tools
 - [x] Network diagnostics tools (TestConnection, ResolveDns, GetNetworkAdapters)
 - [x] Print diagnostics tools (ListPrinters, GetPrinter, GetPrintJobs, GetAllPrintJobs)
 
-### Phase 4: Polish & Distribution
+### Phase 4: Polish & Distribution (Current)
 - [ ] Installation script / MSI
 - [ ] Configuration options
 - [ ] Documentation for end users

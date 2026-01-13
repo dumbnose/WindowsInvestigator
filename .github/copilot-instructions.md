@@ -21,6 +21,10 @@ When investigating Windows issues in this repository, **always use the WindowsIn
 | `Get-ChildItem` (Registry) | `SearchRegistryKeys`, `SearchRegistryValues` |
 | `Get-Process` | `ListProcesses`, `GetProcess`, `SearchProcesses` |
 | `ps`, `tasklist` | `GetProcessSummary` |
+| `Get-Counter`, Performance Monitor | `GetPerformanceSnapshot`, `GetPerformanceCounter` |
+| `Get-HotFix`, Windows Update history | `GetUpdateStatus`, `GetUpdateHistory` |
+| Reliability Monitor | `GetReliabilityEvents`, `GetApplicationCrashes` |
+| `Get-ScheduledTask`, Task Scheduler | `ListScheduledTasks`, `GetScheduledTask` |
 
 ### Available MCP Tools
 
@@ -108,6 +112,64 @@ When investigating Windows issues in this repository, **always use the WindowsIn
     - Parameters:
       - `pattern` (required): Regex pattern to match process name or command line
 23. **GetProcessSummary** - Gets a summary of system resource usage including top CPU and memory consumers
+
+#### Performance Tools
+24. **GetPerformanceSnapshot** - Gets a snapshot of current system performance (CPU, memory, disk, network)
+25. **ListPerformanceCategories** - Lists available performance counter categories
+26. **GetPerformanceCounter** - Gets the value of a specific performance counter
+    - Parameters:
+      - `categoryName` (required): The performance counter category (e.g., "Processor", "Memory")
+      - `counterName` (required): The counter name (e.g., "% Processor Time")
+      - `instanceName` (optional): Instance name (e.g., "_Total")
+27. **GetCategoryCounters** - Gets all counter values for a performance category
+    - Parameters:
+      - `categoryName` (required): The category name
+      - `instanceName` (optional): Instance name
+
+#### Windows Update Tools
+28. **GetUpdateStatus** - Gets current Windows Update status including pending updates and reboot requirements
+29. **GetUpdateHistory** - Gets history of installed Windows updates
+    - Parameters:
+      - `maxResults` (optional): Maximum number of updates to return (default: 50)
+30. **GetPendingUpdates** - Gets pending updates waiting to be installed
+31. **GetUpdateFailures** - Gets recent Windows Update failures
+    - Parameters:
+      - `maxResults` (optional): Maximum number of failures to return (default: 20)
+
+#### Reliability Tools
+32. **GetReliabilityEvents** - Gets reliability events (crashes, hangs, failures) from Reliability Monitor
+    - Parameters:
+      - `startTime` (optional): Start time for query (default: 30 days ago)
+      - `endTime` (optional): End time for query (default: now)
+      - `maxResults` (optional): Maximum number of events (default: 50)
+33. **GetApplicationCrashes** - Gets recent application crashes
+    - Parameters:
+      - `maxResults` (optional): Maximum number of crashes (default: 20)
+34. **GetApplicationHangs** - Gets recent application hangs
+    - Parameters:
+      - `maxResults` (optional): Maximum number of hangs (default: 20)
+35. **GetSystemFailures** - Gets system failures (BSODs, unexpected shutdowns)
+    - Parameters:
+      - `maxResults` (optional): Maximum number of failures (default: 20)
+36. **GetReliabilityScores** - Gets daily reliability scores showing system stability over time
+    - Parameters:
+      - `days` (optional): Number of days of history (default: 30)
+
+#### Scheduled Task Tools
+37. **ListScheduledTasks** - Lists all scheduled tasks on the system
+    - Parameters:
+      - `includeHidden` (optional): Include hidden tasks (default: false)
+38. **GetScheduledTask** - Gets information about a specific scheduled task
+    - Parameters:
+      - `taskPath` (required): Full path of the task (e.g., "\\Microsoft\\Windows\\WindowsUpdate\\Scheduled Start")
+39. **SearchScheduledTasks** - Searches for scheduled tasks matching a pattern
+    - Parameters:
+      - `pattern` (required): Regex pattern to match task name, path, or description
+40. **GetFailedTasks** - Gets scheduled tasks that have failed recently
+41. **GetTaskHistory** - Gets the run history for a specific scheduled task
+    - Parameters:
+      - `taskPath` (required): Full path of the task
+      - `maxResults` (optional): Maximum number of history entries (default: 20)
 
 ### Why Use MCP Tools?
 
