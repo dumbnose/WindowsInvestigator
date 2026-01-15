@@ -50,7 +50,7 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot = Split-Path -Parent $ScriptDir
 $ProjectDir = Join-Path $RepoRoot "src\WindowsInvestigator.McpServer"
 $ProjectFile = Join-Path $ProjectDir "WindowsInvestigator.McpServer.csproj"
-$McpConfigPath = Join-Path $env:USERPROFILE ".github-copilot\mcp.json"
+$McpConfigPath = Join-Path $env:USERPROFILE ".copilot\mcp-config.json"
 $McpConfigDir = Split-Path -Parent $McpConfigPath
 
 # Default install path is the build output

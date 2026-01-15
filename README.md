@@ -39,7 +39,7 @@ Run the installation script from the repository root:
 
 This will:
 1. Build the MCP server in Release configuration
-2. Register it with GitHub Copilot CLI at `~/.github-copilot/mcp.json`
+2. Register it with GitHub Copilot CLI at `~/.copilot/mcp-config.json`
 
 ### Manual Installation
 
@@ -54,11 +54,11 @@ This will:
    dotnet build -c Release
    ```
 
-3. Register with GitHub Copilot CLI by adding to `~/.github-copilot/mcp.json`:
+3. Register with GitHub Copilot CLI by adding to `~/.copilot/mcp-config.json`:
    ```json
    {
      "mcpServers": {
-       "WindowsInvestigator": {
+       "windows-investigator": {
          "command": "C:\\path\\to\\WindowsInvestigator.McpServer.exe",
          "args": []
        }
