@@ -1,0 +1,12 @@
+schemaVersion: 1.0.0
+providers:
+- provider: InventoryAsCode
+  version: 1.0.0
+  metadata:
+    isProduction: false
+    accountableOwners:
+      service: 6b503797-6dcf-4f37-861f-a76db539a823
+    routing:
+      defaultAreaPath:
+        org: msazure
+        path: One\Azure Edge and Platform\Health and Standards\AIOps\Azure Alerts\Azure Alerts Data Plane
